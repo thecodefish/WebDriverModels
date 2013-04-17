@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using SubSpec;
@@ -15,7 +11,7 @@ namespace WebDriverModels.Tests
 	public class AdvancedModelTests
 	{
 		[Specification]
-		public void ShouldFindModelOnPage()
+		public void LoadingSingleModelForReadAccess()
 		{
 			IWebDriver driver = null;
 			AdvancedModel model = null;
@@ -37,14 +33,58 @@ namespace WebDriverModels.Tests
 				.Do(() => exception = Record.Exception(() => model = ModelFinder.FindModel<AdvancedModel>(driver)));
 
 			"Then no exceptions should be thrown"
-				.Observation(() => Assert.Null(exception));
+				.Assert(() => Assert.Null(exception));
 
-			"The correct property value should be returned"
-				.Observation(() => Assert.Equal("Item #1 Text", model.ItemOne));
+			"The model should load a string property by ID by default"
+				.Assert(() => Assert.Equal("Item #1 Text", model.ItemOne));
+
+			"The model should load a string property by ID"
+				.Assert(() => Assert.Equal("Item #2 Text", model.ItemTwo));
+
+			"The model should load a string property by class name"
+				.Assert(() => Assert.Equal("Item #3 Text", model.ItemThree));
+
+			"The model should load a string property by CSS selector"
+				.Assert(() => Assert.Equal("Item #4 Text", model.ItemFour));
+
+			"The model should load a string property from an input field"
+				.Assert(() => Assert.Equal("Item #5 Text", model.ItemFive));
 		}
 
 		[Specification]
-		public void ShouldThrowExceptionIfModelDoesNotExistOnPage()
+		public void WritingToAPropertyBackedByInputField()
+		{
+			IWebDriver driver = null;
+			AdvancedModel model = null;
+			var exception = default(Exception);
+
+			"Given the advanced model is loaded from a test page"
+				.ContextFixture(() =>
+					{
+						string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
+
+						driver = CurrentDriver.Driver = new FirefoxDriver();
+
+						driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
+
+						model = ModelFinder.FindModel<AdvancedModel>(driver);
+
+						return driver;
+					});
+
+			"When an Input Field backed property is updated"
+				.Do(() => model.ItemFive = "Updated text");
+
+			"Then the value of the input field is updated"
+				.Assert(() =>
+					{
+						IWebElement inputField = driver.FindElement(By.Id("itemFive"));
+						Assert.Equal("Updated text", inputField.GetAttribute("value"));
+					});
+		}
+
+		[Specification]
+		public void LoadingModelThatCannotBeFound()
 		{
 			IWebDriver driver = null;
 			var exception = default(Exception);

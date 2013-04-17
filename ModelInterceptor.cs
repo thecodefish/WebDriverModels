@@ -38,6 +38,31 @@ namespace WebDriverModels
 					return;
 				}
 			}
+			else if (invocation.Method.Name.StartsWith("set_"))
+			{
+				string propertyName = invocation.Method.Name.Substring(4);
+				var property = invocation.Method.DeclaringType.GetProperty(propertyName);
+				var attribute = property.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
+				//var attribute = Attribute.GetCustomAttribute(invocation.Method, typeof (ModelLocatorAttribute));
+
+				if (attribute == null || !(property.PropertyType.IsAssignableFrom(typeof(string))) ||
+					!property.CanWrite)
+				{
+					invocation.Proceed();
+					return;
+				}
+
+				IWebDriver driver = CurrentDriver.Driver;
+
+				IWebElement element = driver.FindElement(attribute.Locator);
+
+				if (element.TagName == "input")
+				{
+					element.Clear();
+					element.SendKeys(invocation.GetArgumentValue(0).ToString());
+					return;
+				}
+			}
 
 			invocation.Proceed();
 		}
