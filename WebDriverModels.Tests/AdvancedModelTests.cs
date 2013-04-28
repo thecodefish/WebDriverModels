@@ -51,37 +51,7 @@ namespace WebDriverModels.Tests
 				.Assert(() => Assert.Equal("Item #5 Text", model.ItemFive));
 		}
 
-		[Specification]
-		public void WritingToAPropertyBackedByInputField()
-		{
-			IWebDriver driver = null;
-			AdvancedModel model = null;
-			var exception = default(Exception);
-
-			"Given the advanced model is loaded from a test page"
-				.ContextFixture(() =>
-					{
-						string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
-						driver = CurrentDriver.Driver = new FirefoxDriver();
-
-						driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
-
-						model = ModelFinder.FindModel<AdvancedModel>(driver);
-
-						return driver;
-					});
-
-			"When an Input Field backed property is updated"
-				.Do(() => model.ItemFive = "Updated text");
-
-			"Then the value of the input field is updated"
-				.Assert(() =>
-					{
-						IWebElement inputField = driver.FindElement(By.Id("itemFive"));
-						Assert.Equal("Updated text", inputField.GetAttribute("value"));
-					});
-		}
+		
 
 		[Specification]
 		public void LoadingModelThatCannotBeFound()

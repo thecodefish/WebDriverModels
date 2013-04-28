@@ -10,12 +10,13 @@ namespace WebDriverModels
 	{
 		public void Intercept(IInvocation invocation)
 		{
+			ModelLocatorAttribute attribute;
+
 			if (invocation.Method.Name.StartsWith("get_"))
 			{
 				string propertyName = invocation.Method.Name.Substring(4);
 				var property = invocation.Method.DeclaringType.GetProperty(propertyName);
-				var attribute = property.GetCustomAttributes(typeof (ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
-				//var attribute = Attribute.GetCustomAttribute(invocation.Method, typeof (ModelLocatorAttribute));
+				attribute = property.GetCustomAttributes(typeof (ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
 
 				if (attribute == null)
 				{
@@ -38,14 +39,16 @@ namespace WebDriverModels
 					return;
 				}
 			}
-			else if (invocation.Method.Name.StartsWith("set_"))
+			
+			if (invocation.Method.Name.StartsWith("set_"))
 			{
 				string propertyName = invocation.Method.Name.Substring(4);
 				var property = invocation.Method.DeclaringType.GetProperty(propertyName);
-				var attribute = property.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
-				//var attribute = Attribute.GetCustomAttribute(invocation.Method, typeof (ModelLocatorAttribute));
+				attribute = property.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
 
-				if (attribute == null || !(property.PropertyType.IsAssignableFrom(typeof(string))) ||
+				if (attribute == null ||
+					!(property.PropertyType.IsAssignableFrom(typeof(string)) ||
+						property.PropertyType.IsAssignableFrom(typeof(bool))) ||
 					!property.CanWrite)
 				{
 					invocation.Proceed();
@@ -56,15 +59,63 @@ namespace WebDriverModels
 
 				IWebElement element = driver.FindElement(attribute.Locator);
 
-				if (element.TagName == "input")
+				UpdateInputEnabledElement(driver, element, invocation.GetArgumentValue(0));
+
+				return;
+			}
+
+			//not a property method - check if there's an attribute on the method, and intercept it if so
+			attribute =
+				invocation.Method.GetCustomAttributes(typeof (ModelLocatorAttribute), true).FirstOrDefault() as
+				ModelLocatorAttribute;
+
+			if (attribute != null)
+			{
+				IWebDriver driver = CurrentDriver.Driver;
+
+				IWebElement element = driver.FindElement(attribute.Locator);
+
+				element.Click();
+
+				return;
+			}
+
+			invocation.Proceed();
+		}
+
+		private void UpdateInputEnabledElement(IWebDriver driver, IWebElement element, object value)
+		{
+			var tagName = element.TagName;
+			var type = element.GetAttribute("type");
+
+			if (tagName != "input" && tagName != "textarea")
+			{
+				//can't handle input
+				//todo: throw exception? value not writeable
+				return;
+			}
+
+			//special cases
+			if (type == "checkbox")
+			{
+				if (value is bool)
 				{
-					element.Clear();
-					element.SendKeys(invocation.GetArgumentValue(0).ToString());
+					if (element.Selected != (bool) value)
+					{
+						element.Click();
+					}
+					return;
+				}
+				else
+				{
+					//todo throw exception? wrong value type for checkbox
 					return;
 				}
 			}
 
-			invocation.Proceed();
+			//general case (just send keyboard input)
+			element.Clear();
+			element.SendKeys(value.ToString());
 		}
 	}
 }

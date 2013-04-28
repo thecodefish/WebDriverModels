@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+</head>
+<body>
+	<div id="container">
+		<div><input type="text" id="textField" value="textField Text"/></div>
+		<div><input type="password" id="passwordField" value="passwordField Text" /></div>
+		<div><input type="email" id="emailField" value="emailField Text" /></div>
+		<div><input type="checkbox" id="checkbox" /> checkbox</div>
+		<div id="radioGroup">
+			<input type="radio" name="radioGroup" value="1"/>1<br/>
+			<input type="radio" name="radioGroup" value="2"/>2<br/>
+		</div>
+		<div>
+			<select id="select">
+				<option id="option1">1</option>
+				<option id="option2">2</option>
+			</select>
+		</div>
+		<div><textarea id="textarea">TextArea text</textarea></div>
+		<div>
+			<input type="button" id="inputButton" value="input[button]" onclick="showInputButtonMessage()"/>
+			<div id="inputButtonMessage" style="display:none;">Thankyou for clicking</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		function showInputButtonMessage() {
+			var message = document.getElementById('inputButtonMessage');
+			message.style.display = 'block';
+		}
+	</script>
+</body>
+</html>
