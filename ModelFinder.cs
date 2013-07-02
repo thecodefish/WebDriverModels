@@ -1,7 +1,9 @@
 ﻿
+using System;
 using System.Linq;
 using Castle.DynamicProxy;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace WebDriverModels
 {
@@ -30,6 +32,13 @@ namespace WebDriverModels
 			var proxy = Generator.CreateClassProxy<T>(modelInterceptor);
 
 			return proxy;
+		}
+
+		public static T WaitForModel<T>(IWebDriver driver, TimeSpan timeout) where T : class
+		{
+			var wait = new WebDriverWait(driver, timeout);
+
+			return wait.Until(FindModel<T>);
 		}
 	}
 }
