@@ -84,8 +84,8 @@
     <Content Include="SubSpec\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebDriverModels.csproj">
-      <Project>{778C45EF-ADFA-4F98-8825-5EDB1EFDB359}</Project>
+    <ProjectReference Include="..\WebDriverModels\WebDriverModels.csproj">
+      <Project>{778c45ef-adfa-4f98-8825-5edb1efdb359}</Project>
       <Name>WebDriverModels</Name>
     </ProjectReference>
   </ItemGroup>
