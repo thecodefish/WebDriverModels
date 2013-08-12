@@ -5,6 +5,7 @@ using OpenQA.Selenium.Firefox;
 using SubSpec;
 using WebDriverModels.Tests.Models;
 using Xunit;
+using Xunit.Sdk;
 
 namespace WebDriverModels.Tests
 {
@@ -76,6 +77,56 @@ namespace WebDriverModels.Tests
 
 			"Then an exception should be thrown"
 				.Assert(() => Assert.NotNull(exception));
+		}
+
+		[Specification]
+		public void ModelExistsShouldReturnTrueIfTheModelCanBeFound()
+		{
+			IWebDriver driver = null;
+			bool result = false;
+
+			"Given a browser pointed at the basic test page"
+				.ContextFixture(() =>
+				{
+					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
+
+					driver = CurrentDriver.Driver = new FirefoxDriver();
+
+					driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
+
+					return driver;
+				});
+
+			"When ModelExists is called"
+				.Do(() => result = ModelFinder.ModelExists<AdvancedModel>(driver));
+
+			"Then the result should be true"
+				.Assert(() => Assert.True(result));
+		}
+
+		[Specification]
+		public void ModelExistsShouldReturnFalseIfTheModelCannotBeFound()
+		{
+			IWebDriver driver = null;
+			bool result = false;
+
+			"Given a browser pointed at the empty test page"
+				.ContextFixture(() =>
+				{
+					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
+
+					driver = CurrentDriver.Driver = new FirefoxDriver();
+
+					driver.Navigate().GoToUrl("file://" + htmlPath + "Empty.html");
+
+					return driver;
+				});
+
+			"When ModelExists is called"
+				.Do(() => result = ModelFinder.ModelExists<AdvancedModel>(driver));
+
+			"Then the result should be false"
+				.Assert(() => Assert.False(result));
 		}
 	}
 }

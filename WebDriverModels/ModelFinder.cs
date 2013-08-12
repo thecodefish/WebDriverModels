@@ -40,5 +40,17 @@ namespace WebDriverModels
 
 			return wait.Until(FindModel<T>);
 		}
+
+		public static bool ModelExists<T>(IWebDriver driver) where T : class
+		{
+			try
+			{
+				return FindModel<T>(driver) != null;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 	}
 }
