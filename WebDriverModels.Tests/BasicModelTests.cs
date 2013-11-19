@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using SubSpec;
+using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
 
@@ -20,12 +20,8 @@ namespace WebDriverModels.Tests
             "Given a browser pointed at the basic test page"
                 .ContextFixture(() =>
                     {
-                        //string assemblyFolder = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-                        string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
                         _driver = new FirefoxDriver();
-
-                        _driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
+						_driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
 
                         return _driver;
                     });

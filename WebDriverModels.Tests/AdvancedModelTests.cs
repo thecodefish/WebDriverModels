@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using SubSpec;
+using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
-using Xunit.Sdk;
 
 namespace WebDriverModels.Tests
 {
@@ -21,11 +20,8 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the basic test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
 
 					return driver;
 				});
@@ -63,11 +59,8 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the empty test page"
 				.ContextFixture(() =>
 					{
-						string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
 						driver = CurrentDriver.Driver = new FirefoxDriver();
-
-						driver.Navigate().GoToUrl("file://" + htmlPath + "Empty.html");
+						driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Empty.html");
 
 						return driver;
 					});
@@ -88,11 +81,8 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the basic test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Basic.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
 
 					return driver;
 				});
@@ -113,11 +103,8 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the empty test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
-
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Empty.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Empty.html");
 
 					return driver;
 				});

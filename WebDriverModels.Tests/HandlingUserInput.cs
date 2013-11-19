@@ -1,8 +1,8 @@
 ﻿
-using System.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using SubSpec;
+using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
 
@@ -19,9 +19,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -49,9 +48,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -78,9 +76,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -107,9 +104,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -136,9 +132,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -165,9 +160,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -196,9 +190,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page, where the checkbox is already selected"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
@@ -239,9 +232,8 @@ namespace WebDriverModels.Tests
 			"Given the input model is loaded from a test page"
 				.ContextFixture(() =>
 				{
-					string htmlPath = ConfigurationManager.AppSettings["HtmlBasePath"];
 					driver = CurrentDriver.Driver = new FirefoxDriver();
-					driver.Navigate().GoToUrl("file://" + htmlPath + "Input.html");
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
 					model = ModelFinder.FindModel<InputModel>(driver);
 
