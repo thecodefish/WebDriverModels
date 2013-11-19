@@ -1,25 +1,23 @@
-<?xml version="1.0"?>
-<package >
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>foo</id>
-        <version>0.4.0</version>
-        <title>var</title>
-        <authors>asdf</authors>
-        <owners>asdf</owners>
-        <!--<licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-        <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-        <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+        <id>WebDriverModels</id>
+        <version>0.5.0</version>
+        <title>WebDriverModels</title>
+        <authors>thecodefish</authors>
+        <owners>thecodefish</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>asdf</description>
-        <releaseNotes>Initial release.</releaseNotes>
+        <description>Simple project to extend the idea of PageObjectModels for Selenium WebDriver. Define simple classes to represent your page or portion of a page, and use attributes to tell WebDriver how the model maps to the html.</description>
+        <releaseNotes>Updated to latest versions of WebDriver.</releaseNotes>
         <copyright>Copyright 2013</copyright>
-        <!--<tags>Tag1 Tag2</tags>-->
+        <tags>webdriver model</tags>
         <dependencies>
-            <group>
-                <dependency id="Castle.Core" version="3.2.0" />
-                <dependency id="Selenium.WebDriver" version="[2.32.0]" />
-                <dependency id="Selenium.Support" version="[2.32.0]" />
-            </group>
+            <dependency id="Castle.Core" version="3.2.1" />
+            <dependency id="Selenium.WebDriver" version="2.37.0" />
+            <dependency id="Selenium.Support" version="2.37.0" />
         </dependencies>
     </metadata>
+    <files>
+        <file src="..\WebDriverModels\bin\Release\WebDriverModels.dll" target="lib\net45\WebDriverModels.dll" />
+    </files>
 </package>
