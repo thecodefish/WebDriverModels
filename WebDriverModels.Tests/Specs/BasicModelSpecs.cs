@@ -6,9 +6,9 @@ using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
 
-namespace WebDriverModels.Tests
+namespace WebDriverModels.Tests.Specs
 {
-    public class BasicModelTests
+    public class BasicModelSpecs
     {
         [Specification]
         public void ShouldFindModelOnPage()

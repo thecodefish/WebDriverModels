@@ -6,9 +6,9 @@ using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
 
-namespace WebDriverModels.Tests
+namespace WebDriverModels.Tests.Specs
 {
-	public class AdvancedModelTests
+	public class AdvancedModelSpecs
 	{
 		[Specification]
 		public void LoadingSingleModelForReadAccess()

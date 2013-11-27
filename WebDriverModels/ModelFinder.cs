@@ -1,6 +1,8 @@
 ﻿
 using System;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using Castle.DynamicProxy;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -51,6 +53,64 @@ namespace WebDriverModels
 			{
 				return false;
 			}
+		}
+
+		//void func()
+		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Action<T>> func)
+		{
+			MethodCallExpression method = func.Body as MethodCallExpression;
+
+			if (method == null)
+			{
+				return false;
+			}
+
+			ModelLocatorAttribute modelAttribute = method.Method.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
+
+			if (modelAttribute != null)
+			{
+				try
+				{
+					return driver.FindElement(modelAttribute.Locator) != null;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+
+			return false;
+		}
+
+		//property
+		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Func<T, object>> func)
+		{
+			MemberExpression memberExpression = func.Body as MemberExpression;
+
+			if (memberExpression == null)
+			{
+				return false;
+			}
+
+			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
+
+			if (modelAttribute != null)
+			{
+				try
+				{
+					return driver.FindElement(modelAttribute.Locator) != null;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+
+			return false;
 		}
 	}
 }

@@ -32,5 +32,8 @@ namespace WebDriverModels.Tests.Models
 
 		[ModelLocator("inputButtonMessage")]
 		public virtual string InputButtonMessage { get; set; }
+
+		[ModelLocator("bogusElement")]
+		public virtual string FieldThatDoesNotExist { get; set; }
 	}
 }

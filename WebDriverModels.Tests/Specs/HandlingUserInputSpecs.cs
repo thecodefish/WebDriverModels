@@ -1,14 +1,13 @@
-﻿
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.PhantomJS;
 using SubSpec;
 using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
 using Xunit;
 
-namespace WebDriverModels.Tests
+namespace WebDriverModels.Tests.Specs
 {
-	public class HandlingUserInput
+	public class HandlingUserInputSpecs
 	{
 		[Specification]
 		public void WritingToAnInputTextField()
