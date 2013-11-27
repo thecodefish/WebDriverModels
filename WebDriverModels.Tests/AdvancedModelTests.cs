@@ -1,6 +1,6 @@
 ﻿using System;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.PhantomJS;
 using SubSpec;
 using WebDriverModels.Tests.Configuration;
 using WebDriverModels.Tests.Models;
@@ -20,7 +20,7 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the basic test page"
 				.ContextFixture(() =>
 				{
-					driver = CurrentDriver.Driver = new FirefoxDriver();
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
 
 					return driver;
@@ -59,7 +59,7 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the empty test page"
 				.ContextFixture(() =>
 					{
-						driver = CurrentDriver.Driver = new FirefoxDriver();
+						driver = CurrentDriver.Driver = new PhantomJSDriver();
 						driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Empty.html");
 
 						return driver;
@@ -81,7 +81,7 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the basic test page"
 				.ContextFixture(() =>
 				{
-					driver = CurrentDriver.Driver = new FirefoxDriver();
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
 
 					return driver;
@@ -103,7 +103,7 @@ namespace WebDriverModels.Tests
 			"Given a browser pointed at the empty test page"
 				.ContextFixture(() =>
 				{
-					driver = CurrentDriver.Driver = new FirefoxDriver();
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Empty.html");
 
 					return driver;
