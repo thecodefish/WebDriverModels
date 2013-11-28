@@ -39,6 +39,34 @@ namespace WebDriverModels.Tests.Specs
 		}
 
 		[Specification]
+		public void CheckingTheExistenceOfABooleanModelProperty()
+		{
+			IWebDriver driver = null;
+			bool propertyExists = false;
+			var exception = default(Exception);
+
+			"Given a browser pointed at the input test page"
+				.ContextFixture(() =>
+				{
+					PhantomJSOptions options = new PhantomJSOptions();
+					options.AddAdditionalCapability("takesScreenshot", false);
+					driver = CurrentDriver.Driver = new PhantomJSDriver(options);
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
+
+					return driver;
+				});
+
+			"When testing for the existence of a boolean model property that actually exists"
+				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.CheckboxIsChecked)));
+
+			"Then no exceptions should be thrown"
+				.Assert(() => Assert.Null(exception));
+
+			"The property should be found"
+				.Assert(() => Assert.True(propertyExists));
+		}
+
+		[Specification]
 		public void CheckingTheExistenceOfAModelPropertyWhenThatPropertyIsAttachedToAMethod()
 		{
 			IWebDriver driver = null;

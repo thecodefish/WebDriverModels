@@ -72,16 +72,16 @@ namespace WebDriverModels
 		//void func()
 		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Action<T>> func)
 		{
-			MethodCallExpression method = func.Body as MethodCallExpression;
+			ModelLocatorAttribute modelAttribute = null;
 
-			if (method == null)
+			if (func.Body is MethodCallExpression)
 			{
-				return false;
-			}
+				MethodCallExpression method = func.Body as MethodCallExpression;
 
-			ModelLocatorAttribute modelAttribute = method.Method.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
-				.FirstOrDefault()
-				as ModelLocatorAttribute;
+				modelAttribute = method.Method.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
+					.FirstOrDefault()
+					as ModelLocatorAttribute;
+			}
 
 			if (modelAttribute != null)
 			{
@@ -99,16 +99,27 @@ namespace WebDriverModels
 		}
 
 		//property
-		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Func<T, object>> func)
+		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Func<T, object>> expression)
 		{
-			MemberExpression memberExpression = func.Body as MemberExpression;
+			MemberExpression memberExpression;
+
+			if (expression.Body.NodeType == ExpressionType.Convert || expression.Body.NodeType == ExpressionType.ConvertChecked)
+			{
+				UnaryExpression unaryExpression = expression.Body as UnaryExpression;
+
+				memberExpression = ((unaryExpression != null) ? unaryExpression.Operand : null) as MemberExpression;
+			}
+			else
+			{
+				memberExpression = expression.Body as MemberExpression;
+			}
 
 			if (memberExpression == null)
 			{
 				return false;
 			}
 
-			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
 				.FirstOrDefault()
 				as ModelLocatorAttribute;
 
