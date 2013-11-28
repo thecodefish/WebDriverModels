@@ -55,6 +55,20 @@ namespace WebDriverModels
 			}
 		}
 
+		public static bool ModelExists<T>(IWebDriver driver, TimeSpan timeout) where T : class
+		{
+			var wait = new WebDriverWait(driver, timeout);
+
+			try
+			{
+				return wait.Until(ModelExists<T>);
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		//void func()
 		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Action<T>> func)
 		{

@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+</head>
+<body>
+	
+	<script type="text/javascript">
+		
+		function showContainer()
+		{
+			var container = document.createElement('div');
+			container.id = 'container';
+
+			var div = document.createElement('div');
+			div.id = 'itemOne';
+			div.innerHTML = 'Item #1 Text';
+
+			container.appendChild(div);
+
+			document.body.appendChild(container);
+		}
+
+		window.onload = function()
+		{
+			window.setTimeout(function() { showContainer(); }, 2000);
+		};
+		
+	</script>
+</body>
+</html>

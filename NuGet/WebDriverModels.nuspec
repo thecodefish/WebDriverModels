@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>WebDriverModels</id>
-        <version>0.5.0</version>
+        <version>0.6.0</version>
         <title>WebDriverModels</title>
         <authors>thecodefish</authors>
         <owners>thecodefish</owners>

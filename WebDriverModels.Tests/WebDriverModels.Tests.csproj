@@ -72,6 +72,7 @@
     <Compile Include="Models\BasicModel.cs" />
     <Compile Include="Models\InputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Specs\ModelExistsWithTimeoutSpecs.cs" />
     <Compile Include="Specs\ModelPropertySpecs.cs" />
     <Compile Include="SubSpec\SubSpec.cs" />
     <Compile Include="SubSpec\SubSpec.Thesis.cs" />
@@ -91,6 +92,7 @@
     <Content Include="Html\Basic.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Html\Delayed.html" />
     <Content Include="Html\Empty.html" />
     <Content Include="Html\Input.html" />
     <Content Include="phantomjs-license.txt">
