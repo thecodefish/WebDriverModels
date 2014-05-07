@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>WebDriverModels</id>
-        <version>0.7.1</version>
+        <version>0.8.0</version>
         <title>WebDriverModels</title>
         <authors>thecodefish</authors>
         <owners>thecodefish</owners>
@@ -12,9 +12,9 @@
         <copyright>Copyright 2013</copyright>
         <tags>webdriver model</tags>
         <dependencies>
-            <dependency id="Castle.Core" version="3.2.1" />
-            <dependency id="Selenium.WebDriver" version="2.37.0" />
-            <dependency id="Selenium.Support" version="2.37.0" />
+            <dependency id="Castle.Core" version="3.3.0" />
+            <dependency id="Selenium.WebDriver" version="2.41.0" />
+            <dependency id="Selenium.Support" version="2.41.0" />
         </dependencies>
     </metadata>
     <files>
