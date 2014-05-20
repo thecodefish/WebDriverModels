@@ -21,7 +21,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});
@@ -50,7 +50,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});
@@ -78,7 +78,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});
@@ -106,7 +106,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});
@@ -134,7 +134,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});
@@ -162,7 +162,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					driver.FindElement(By.Id("checkbox")).Click();
 
@@ -192,7 +192,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					driver.FindElement(By.Id("checkbox")).Click();
 
@@ -234,7 +234,7 @@ namespace WebDriverModels.Tests.Specs
 					driver = CurrentDriver.Driver = new PhantomJSDriver();
 					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Input.html");
 
-					model = ModelFinder.FindModel<InputModel>(driver);
+					model = driver.FindModel<InputModel>();
 
 					return driver;
 				});

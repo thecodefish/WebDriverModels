@@ -60,6 +60,7 @@
     <Compile Include="ModelInterceptor.cs" />
     <Compile Include="ModelLocatorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebDriverExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

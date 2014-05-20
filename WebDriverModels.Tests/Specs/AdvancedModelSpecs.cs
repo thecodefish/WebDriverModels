@@ -27,7 +27,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When the advanced model is loaded"
-				.Do(() => exception = Record.Exception(() => model = ModelFinder.FindModel<AdvancedModel>(driver)));
+				.Do(() => exception = Record.Exception(() => model = driver.FindModel<AdvancedModel>()));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -66,7 +66,7 @@ namespace WebDriverModels.Tests.Specs
 					});
 
 			"When the advanced model is loaded"
-				.Do(() => exception = Record.Exception(() => ModelFinder.FindModel<AdvancedModel>(driver)));
+				.Do(() => exception = Record.Exception(() => driver.FindModel<AdvancedModel>()));
 
 			"Then an exception should be thrown"
 				.Assert(() => Assert.NotNull(exception));
@@ -88,7 +88,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When ModelExists is called"
-				.Do(() => result = ModelFinder.ModelExists<AdvancedModel>(driver));
+				.Do(() => result = driver.ModelExists<AdvancedModel>());
 
 			"Then the result should be true"
 				.Assert(() => Assert.True(result));
@@ -110,7 +110,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When ModelExists is called"
-				.Do(() => result = ModelFinder.ModelExists<AdvancedModel>(driver));
+				.Do(() => result = driver.ModelExists<AdvancedModel>());
 
 			"Then the result should be false"
 				.Assert(() => Assert.False(result));

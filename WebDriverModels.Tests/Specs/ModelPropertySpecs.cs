@@ -29,7 +29,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When testing for the existence of a model property that actually exists"
-				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.Text)));
+				.Do(() => exception = Record.Exception(() => propertyExists = driver.ModelPropertyExists<InputModel>(m => m.Text)));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -57,7 +57,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When testing for the existence of a boolean model property that actually exists"
-				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.CheckboxIsChecked)));
+				.Do(() => exception = Record.Exception(() => propertyExists = driver.ModelPropertyExists<InputModel>(m => m.CheckboxIsChecked)));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -83,7 +83,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When testing for the existence of a model property that refers to a method"
-				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.ClickButton())));
+				.Do(() => exception = Record.Exception(() => propertyExists = driver.ModelPropertyExists<InputModel>(m => m.ClickButton())));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -109,7 +109,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When testing for the existence of a model property that does not exist"
-				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.FieldThatDoesNotExist)));
+				.Do(() => exception = Record.Exception(() => propertyExists = driver.ModelPropertyExists<InputModel>(m => m.FieldThatDoesNotExist)));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -135,7 +135,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When testing for the existence of a model property for a model that does not exist on the page"
-				.Do(() => exception = Record.Exception(() => propertyExists = ModelFinder.ModelPropertyExists<InputModel>(driver, m => m.Text)));
+				.Do(() => exception = Record.Exception(() => propertyExists = driver.ModelPropertyExists<InputModel>(m => m.Text)));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));

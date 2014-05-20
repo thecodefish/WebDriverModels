@@ -27,7 +27,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When the advanced model is loaded with a 5 second timeout"
-				.Do(() => exception = Record.Exception(() => foundModel = ModelFinder.ModelExists<AdvancedModel>(driver, TimeSpan.FromSeconds(5))));
+				.Do(() => exception = Record.Exception(() => foundModel = driver.ModelExists<AdvancedModel>(TimeSpan.FromSeconds(5))));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -53,7 +53,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When the advanced model is loaded with a 1 second timeout"
-				.Do(() => exception = Record.Exception(() => foundModel = ModelFinder.ModelExists<AdvancedModel>(driver, TimeSpan.FromSeconds(0.5))));
+				.Do(() => exception = Record.Exception(() => foundModel = driver.ModelExists<AdvancedModel>(TimeSpan.FromSeconds(0.5))));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -79,7 +79,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When the input model is loaded with a 2 second timeout"
-				.Do(() => exception = Record.Exception(() => foundModel = ModelFinder.ModelExists<InputModel>(driver, TimeSpan.FromSeconds(1))));
+				.Do(() => exception = Record.Exception(() => foundModel = driver.ModelExists<InputModel>(TimeSpan.FromSeconds(1))));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
@@ -105,7 +105,7 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When the advanced model is loaded with a 2 second timeout"
-				.Do(() => exception = Record.Exception(() => foundModel = ModelFinder.ModelExists<AdvancedModel>(driver, TimeSpan.FromSeconds(1))));
+				.Do(() => exception = Record.Exception(() => foundModel = driver.ModelExists<AdvancedModel>(TimeSpan.FromSeconds(1))));
 
 			"Then no exceptions should be thrown"
 				.Assert(() => Assert.Null(exception));
