@@ -54,8 +54,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseModel.cs" />
     <Compile Include="CurrentDriver.cs" />
     <Compile Include="IModel.cs" />
+    <Compile Include="KeyValueModel.cs" />
     <Compile Include="ModelFinder.cs" />
     <Compile Include="ModelInterceptor.cs" />
     <Compile Include="ModelLocatorAttribute.cs" />

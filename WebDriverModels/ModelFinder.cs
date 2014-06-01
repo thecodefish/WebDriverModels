@@ -1,5 +1,9 @@
 ﻿
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
@@ -28,12 +32,90 @@ namespace WebDriverModels
 			else
 			{
 				//no model attribute on class?
+				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
 			}
 
-			var modelInterceptor = new ModelInterceptor();
+			var modelInterceptor = new ModelInterceptor(container);
 			var proxy = Generator.CreateClassProxy<T>(modelInterceptor);
 
 			return proxy;
+		}
+
+		internal static object FindModel(Type type, IWebDriver driver)
+		{
+			//get model attribute on class
+			var modelAttribute =
+				type.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
+
+			IWebElement container;
+
+			if (modelAttribute != null)
+			{
+				container = driver.FindElement(modelAttribute.Locator);
+			}
+			else
+			{
+				//no model attribute on class?
+				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
+			}
+
+			var modelInterceptor = new ModelInterceptor(container);
+			var proxy = Generator.CreateClassProxy(type, modelInterceptor);
+
+			return proxy;
+		}
+
+		internal static object FindModel(Type type, IWebElement container)
+		{
+			//get model attribute on class
+			var modelAttribute =
+				type.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
+
+			IWebElement model;
+
+			if (modelAttribute != null)
+			{
+				model = container.FindElement(modelAttribute.Locator);
+			}
+			else
+			{
+				//no model attribute on class?
+				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
+			}
+
+			var modelInterceptor = new ModelInterceptor(model);
+			var proxy = Generator.CreateClassProxy(type, modelInterceptor);
+
+			return proxy;
+		}
+
+		internal static IEnumerable<object> FindModels(Type type, IWebElement container)
+		{
+			//get model attribute on class
+			var modelAttribute =
+				type.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
+
+			IReadOnlyCollection<IWebElement> elements;
+
+			if (modelAttribute != null)
+			{
+				elements = container.FindElements(modelAttribute.Locator);
+			}
+			else
+			{
+				//no model attribute on class?
+				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
+			}
+
+			List<object> items = new List<object>();
+
+			foreach (IWebElement element in elements)
+			{
+				var modelInterceptor = new ModelInterceptor(element);
+				var proxy = Generator.CreateClassProxy(type, modelInterceptor);
+				items.Add(proxy);
+			}
+			return items;
 		}
 
 		public static T WaitForModel<T>(IWebDriver driver, TimeSpan timeout) where T : class
