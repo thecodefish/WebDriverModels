@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.PhantomJS;
 using SubSpec;
 using WebDriverModels.Tests.Configuration;
@@ -210,18 +212,6 @@ namespace WebDriverModels.Tests.Specs
 				});
 		}
 
-		//[Specification]
-		//public void SelectingARadioButton()
-		//{
-			
-		//}
-
-		//[Specification]
-		//public void SelectingFromADropDownList()
-		//{
-			
-		//}
-
 		[Specification]
 		public void ClickingAButton()
 		{
@@ -240,6 +230,34 @@ namespace WebDriverModels.Tests.Specs
 				});
 
 			"When a method is called"
+				.Do(() => model.ClickButton());
+
+			"Then the button that the method represents is clicked"
+				.Assert(() =>
+				{
+					IWebElement message = driver.FindElement(By.Id("inputButtonMessage"));
+					Assert.True(message.Displayed);
+				});
+		}
+
+		[Specification]
+		public void ClickingAButtonThatIsOffScreen()
+		{
+			IWebDriver driver = null;
+			InputModel model = null;
+
+			"Given the input model is loaded from the scrolling test page"
+				.ContextFixture(() =>
+				{
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Scrolling.html");
+
+					model = driver.FindModel<InputModel>();
+
+					return driver;
+				});
+
+			"When a method is called for a button that is offscreen"
 				.Do(() => model.ClickButton());
 
 			"Then the button that the method represents is clicked"

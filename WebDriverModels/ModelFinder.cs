@@ -35,7 +35,7 @@ namespace WebDriverModels
 				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
 			}
 
-			var modelInterceptor = new ModelInterceptor(container);
+			var modelInterceptor = new ModelInterceptor(container, driver);
 			var proxy = Generator.CreateClassProxy<T>(modelInterceptor);
 
 			return proxy;
@@ -59,13 +59,13 @@ namespace WebDriverModels
 				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
 			}
 
-			var modelInterceptor = new ModelInterceptor(container);
+			var modelInterceptor = new ModelInterceptor(container, driver);
 			var proxy = Generator.CreateClassProxy(type, modelInterceptor);
 
 			return proxy;
 		}
 
-		internal static object FindModel(Type type, IWebElement container)
+		internal static object FindModel(Type type, IWebElement container, IWebDriver driver)
 		{
 			//get model attribute on class
 			var modelAttribute =
@@ -83,13 +83,13 @@ namespace WebDriverModels
 				throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
 			}
 
-			var modelInterceptor = new ModelInterceptor(model);
+			var modelInterceptor = new ModelInterceptor(model, driver);
 			var proxy = Generator.CreateClassProxy(type, modelInterceptor);
 
 			return proxy;
 		}
 
-		internal static IEnumerable<object> FindModels(Type type, IWebElement container)
+		internal static IEnumerable<object> FindModels(Type type, IWebElement container, IWebDriver driver)
 		{
 			//get model attribute on class
 			var modelAttribute =
@@ -111,7 +111,7 @@ namespace WebDriverModels
 
 			foreach (IWebElement element in elements)
 			{
-				var modelInterceptor = new ModelInterceptor(element);
+				var modelInterceptor = new ModelInterceptor(element, driver);
 				var proxy = Generator.CreateClassProxy(type, modelInterceptor);
 				items.Add(proxy);
 			}

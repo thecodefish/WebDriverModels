@@ -1,12 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Castle.DynamicProxy;
 using OpenQA.Selenium;
 
@@ -15,10 +11,12 @@ namespace WebDriverModels
 	public class ModelInterceptor : IInterceptor
 	{
 		private readonly IWebElement _container;
+		private readonly IWebDriver _driver;
 
-		public ModelInterceptor(IWebElement container)
+		public ModelInterceptor(IWebElement container, IWebDriver driver)
 		{
 			_container = container;
+			_driver = driver;
 		}
 
 		private void HandlePropertyGet(IInvocation invocation)
@@ -41,7 +39,7 @@ namespace WebDriverModels
 
 			if (propertyModelAttribute != null)
 			{
-				invocation.ReturnValue = ModelFinder.FindModel(propertyType, _container);
+				invocation.ReturnValue = ModelFinder.FindModel(propertyType, _container, _driver);
 				return;
 			}
 
@@ -108,7 +106,7 @@ namespace WebDriverModels
 						ProxyGenerator generator = new ProxyGenerator();
 						foreach (IWebElement itemElement in itemElements)
 						{
-							var modelInterceptor = new ModelInterceptor(itemElement);
+							var modelInterceptor = new ModelInterceptor(itemElement, _driver);
 							var proxy = generator.CreateClassProxy(itemType, modelInterceptor);
 							//items.Add(DynamicCast(proxy, itemType));
 							items.Add(proxy);
@@ -201,6 +199,13 @@ namespace WebDriverModels
 				if (attribute != null)
 				{
 					IWebElement element = _container.FindElement(attribute.Locator);
+
+					//scroll the element into view to try and stop intermittent Chrome errors
+					IJavaScriptExecutor javaScriptExecutor = _driver as IJavaScriptExecutor;
+					if (javaScriptExecutor != null)
+					{
+						javaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView(true)", element);
+					}
 
 					element.Click();
 

@@ -96,6 +96,10 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\packages\WebDriver.ChromeDriver.win32.2.10.0.0\content\chromedriver.exe">
+      <Link>chromedriver.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Html\Basic.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -103,6 +107,7 @@
     <Content Include="Html\Delayed.html" />
     <Content Include="Html\Empty.html" />
     <Content Include="Html\Input.html" />
+    <Content Include="Html\Scrolling.html" />
     <Content Include="Html\SubModels.html" />
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
