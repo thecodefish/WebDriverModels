@@ -204,7 +204,7 @@ namespace WebDriverModels
 					IJavaScriptExecutor javaScriptExecutor = _driver as IJavaScriptExecutor;
 					if (javaScriptExecutor != null)
 					{
-						javaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView(true)", element);
+						javaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView(false)", element);
 					}
 
 					element.Click();
