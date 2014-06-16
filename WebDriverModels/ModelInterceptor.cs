@@ -44,21 +44,19 @@ namespace WebDriverModels
 			}
 
 			//is this property a string?
-			IWebElement element;
-			if (propertyType == typeof (string))
-			{
-				element = _container.FindElement(attribute.Locator);
+			//if (propertyType == typeof (string))
+			//{
+			//	element = _container.FindElement(attribute.Locator);
 
-				invocation.ReturnValue = EvaluateElementValue(element);
-				return;
-			}
+			//	invocation.ReturnValue = EvaluateElementValue(element);
+			//	return;
+			//}
 
 			//is this property a collection?
 			Type collectionType = typeof (IEnumerable<>);
-			if (propertyType.IsGenericType &&
-				(collectionType.IsAssignableFrom(propertyType.GetGenericTypeDefinition())) ||
-				propertyType.GetInterfaces().Any(x => x.IsGenericType &&
-					x.GetGenericTypeDefinition() == collectionType))
+			if (propertyType != typeof(string) &&
+				(propertyType.IsGenericType && (collectionType.IsAssignableFrom(propertyType.GetGenericTypeDefinition())) ||
+					propertyType.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == collectionType)))
 			{
 				var elements = _container.FindElements(attribute.Locator);
 
@@ -73,14 +71,6 @@ namespace WebDriverModels
 
 					if (itemModelAttribute != null)
 					{
-						//TypeDescriptor.GetConverter(itemType).ConvertFrom(x)
-						//TypeDescriptor.GetConverter(x.GetType()).ConvertTo(x, itemType)
-
-						//invocation.ReturnValue =
-						//	ModelFinder.FindModels(itemType, _container)
-						//	.Select(x => (BaseModel)x)
-						//	.ToList();
-
 						//get model attribute on class
 						var modelAttribute =
 							itemType.GetCustomAttributes(typeof(ModelLocatorAttribute), true).FirstOrDefault() as ModelLocatorAttribute;
@@ -97,9 +87,6 @@ namespace WebDriverModels
 							throw new NotSupportedException("Model must have a ModelLocator attribute on the class.");
 						}
 
-						//List<KeyValueModel> items = new List<KeyValueModel>();
-						//object[] items = new object[itemElements.Count];
-						//int i = 0;
 						var listType = typeof(List<>).MakeGenericType(itemType);
 						var items = Activator.CreateInstance(listType) as IList;
 
@@ -124,15 +111,23 @@ namespace WebDriverModels
 
 				//collection of strings
 				invocation.ReturnValue = elements
-					.Select(childElement => EvaluateElementValue(childElement))
+					.Select(EvaluateElementValue)
 					.ToList();
 
 				return;
 			}
 
-			//just a simple property
-			element = _container.FindElement(attribute.Locator);
+			//just a standard property
+			IWebElement element = _container.FindElement(attribute.Locator);
 
+			//is this looking at an attribute on the element?
+			if (!string.IsNullOrWhiteSpace(attribute.AttributeName))
+			{
+				invocation.ReturnValue = element.GetAttribute(attribute.AttributeName);
+				return;
+			}
+
+			//grab the value of the element
 			invocation.ReturnValue = EvaluateElementValue(element);
 		}
 
@@ -172,6 +167,12 @@ namespace WebDriverModels
 			{
 				invocation.Proceed();
 				return;
+			}
+
+			if (!string.IsNullOrWhiteSpace(attribute.AttributeName))
+			{
+				//cannot set attributes
+				throw new NotSupportedException("Unable to change attribute values");
 			}
 
 			IWebElement element = _container.FindElement(attribute.Locator);
@@ -224,8 +225,7 @@ namespace WebDriverModels
 			if (tagName != "input" && tagName != "textarea")
 			{
 				//can't handle input
-				//todo: throw exception? value not writeable
-				return;
+				throw new NotSupportedException(string.Format("Unable to set values for elements of type <{0}>", tagName));
 			}
 
 			//special cases

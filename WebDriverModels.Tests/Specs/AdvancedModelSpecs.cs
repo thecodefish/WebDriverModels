@@ -115,5 +115,53 @@ namespace WebDriverModels.Tests.Specs
 			"Then the result should be false"
 				.Assert(() => Assert.False(result));
 		}
+
+		[Specification]
+		public void ReadingAnAttributeBasedModelProperty()
+		{
+			IWebDriver driver = null;
+			AdvancedModel model = null;
+			var exception = default(Exception);
+
+			"Given a browser pointed at the basic test page"
+				.ContextFixture(() =>
+				{
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
+
+					return driver;
+				});
+
+			"When the advanced model is loaded"
+				.Do(() => exception = Record.Exception(() => model = driver.FindModel<AdvancedModel>()));
+
+			"The model should be able to read an attribute based model property"
+				.Assert(() => Assert.Equal("1234", model.ItemSixDataId));
+		}
+
+		[Specification]
+		public void WritingAnAttributeBasedModelProperty()
+		{
+			IWebDriver driver = null;
+			AdvancedModel model = null;
+			var exception = default(Exception);
+
+			"Given the advanced model is loaded from the basic test page"
+				.ContextFixture(() =>
+				{
+					driver = CurrentDriver.Driver = new PhantomJSDriver();
+					driver.Navigate().GoToUrl(TestConfiguration.BaseUrl + "Basic.html");
+
+					model = driver.FindModel<AdvancedModel>();
+
+					return driver;
+				});
+
+			"When we update an attribute based model property"
+				.Do(() => exception = Record.Exception(() => model.ItemSixDataId = "4567"));
+
+			"An exception should be thrown"
+				.Assert(() => Assert.NotNull(exception));
+		}
 	}
 }

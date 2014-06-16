@@ -20,5 +20,8 @@ namespace WebDriverModels.Tests.Models
 
 		[ModelLocator("itemFive")]
 		public virtual string ItemFive { get; set; }
+
+		[ModelLocator(Method = How.Id, Identifier = "itemSix", AttributeName = "data-id")]
+		public virtual string ItemSixDataId { get; set; }
 	}
 }

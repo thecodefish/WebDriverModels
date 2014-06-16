@@ -7,8 +7,8 @@ namespace WebDriverModels
 	public class ModelLocatorAttribute : Attribute
 	{
 		public How Method { get; set; }
-
 		public string Identifier { get; set; }
+		public string AttributeName { get; set; }
 
 		public By Locator { get
 		{
