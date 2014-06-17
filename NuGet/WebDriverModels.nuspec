@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>WebDriverModels</id>
-        <version>0.10.3</version>
+        <version>0.10.4</version>
         <title>WebDriverModels</title>
         <authors>thecodefish</authors>
         <owners>thecodefish</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Simple project to extend the idea of PageObjectModels for Selenium WebDriver. Define simple classes to represent your page or portion of a page, and use attributes to tell WebDriver how the model maps to the html.</description>
-		<releaseNotes>Updated ModelLocator attribute to accept element attribute names - will read values from the HTML attribute of the element instead of its value or text.</releaseNotes>
+		<releaseNotes>Added ModelPropertyIsVisible test, to check whether a property exists and is visible to the user.</releaseNotes>
         <copyright>Copyright 2014</copyright>
         <tags>webdriver model</tags>
         <dependencies>

@@ -219,5 +219,74 @@ namespace WebDriverModels
 
 			return false;
 		}
+
+		public static bool ModelPropertyIsVisible<T>(IWebDriver driver, Expression<Action<T>> func)
+		{
+			ModelLocatorAttribute modelAttribute = null;
+
+			if (func.Body is MethodCallExpression)
+			{
+				MethodCallExpression method = func.Body as MethodCallExpression;
+
+				modelAttribute = method.Method.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+					.FirstOrDefault()
+					as ModelLocatorAttribute;
+			}
+
+			if (modelAttribute != null)
+			{
+				try
+				{
+					IWebElement element = driver.FindElement(modelAttribute.Locator);
+					return element != null && element.Displayed;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+
+			return false;
+		}
+
+		public static bool ModelPropertyIsVisible<T>(IWebDriver driver, Expression<Func<T, object>> expression)
+		{
+			MemberExpression memberExpression;
+
+			if (expression.Body.NodeType == ExpressionType.Convert || expression.Body.NodeType == ExpressionType.ConvertChecked)
+			{
+				UnaryExpression unaryExpression = expression.Body as UnaryExpression;
+
+				memberExpression = ((unaryExpression != null) ? unaryExpression.Operand : null) as MemberExpression;
+			}
+			else
+			{
+				memberExpression = expression.Body as MemberExpression;
+			}
+
+			if (memberExpression == null)
+			{
+				return false;
+			}
+
+			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
+
+			if (modelAttribute != null)
+			{
+				try
+				{
+					IWebElement element = driver.FindElement(modelAttribute.Locator);
+					return element != null && element.Displayed;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+
+			return false;
+		}
 	}
 }
