@@ -31,7 +31,17 @@ namespace WebDriverModels
 			return ModelFinder.ModelPropertyExists(driver, func);
 		}
 
+		public static bool ModelPropertyExists(this IWebDriver driver, Expression<Action> func)
+		{
+			return ModelFinder.ModelPropertyExists(driver, func);
+		}
+
 		public static bool ModelPropertyExists<T>(this IWebDriver driver, Expression<Func<T, object>> expression)
+		{
+			return ModelFinder.ModelPropertyExists(driver, expression);
+		}
+
+		public static bool ModelPropertyExists<T>(this IWebDriver driver, Expression<Func<T>> expression)
 		{
 			return ModelFinder.ModelPropertyExists(driver, expression);
 		}
@@ -42,6 +52,11 @@ namespace WebDriverModels
 		}
 
 		public static bool ModelPropertyIsVisible<T>(this IWebDriver driver, Expression<Func<T, object>> expression)
+		{
+			return ModelFinder.ModelPropertyIsVisible(driver, expression);
+		}
+
+		public static bool ModelPropertyIsVisible<T>(this IWebDriver driver, Expression<Func<T>> expression)
 		{
 			return ModelFinder.ModelPropertyIsVisible(driver, expression);
 		}

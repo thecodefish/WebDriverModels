@@ -118,7 +118,8 @@ namespace WebDriverModels
 			}
 
 			//just a standard property
-			IWebElement element = _container.FindElement(attribute.Locator);
+			//IWebElement element = _container.FindElement(attribute.Locator);
+			IWebElement element = ModelFinder.FindElement(_container, attribute);
 
 			//is this looking at an attribute on the element?
 			if (!string.IsNullOrWhiteSpace(attribute.AttributeName))
@@ -175,7 +176,8 @@ namespace WebDriverModels
 				throw new NotSupportedException("Unable to change attribute values");
 			}
 
-			IWebElement element = _container.FindElement(attribute.Locator);
+			//IWebElement element = _container.FindElement(attribute.Locator);
+			IWebElement element = ModelFinder.FindElement(_container, attribute);
 
 			UpdateInputEnabledElement(element, invocation.GetArgumentValue(0));
 		}
@@ -199,7 +201,8 @@ namespace WebDriverModels
 
 				if (attribute != null)
 				{
-					IWebElement element = _container.FindElement(attribute.Locator);
+					//IWebElement element = _container.FindElement(attribute.Locator);
+					IWebElement element = ModelFinder.FindElement(_container, attribute);
 
 					//scroll the element into view to try and stop intermittent Chrome errors
 					IJavaScriptExecutor javaScriptExecutor = _driver as IJavaScriptExecutor;

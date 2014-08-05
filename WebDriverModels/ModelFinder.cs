@@ -1,10 +1,5 @@
-﻿
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Castle.DynamicProxy;
@@ -17,6 +12,73 @@ namespace WebDriverModels
 	{
 		private static readonly ProxyGenerator Generator = new ProxyGenerator();
 
+
+		internal static IWebElement FindElement(IWebDriver driver, ModelLocatorAttribute locatorAttribute)
+		{
+			if (driver == null || locatorAttribute == null)
+			{
+				throw new ArgumentException("Arguments can not be null");
+			}
+
+			if (!locatorAttribute.FindFirstVisibleElement)
+			{
+				//let WebDriver find the first match
+				return driver.FindElement(locatorAttribute.Locator);
+			}
+			else
+			{
+				//loop through all matches until we find one that is visible to the user
+				var matches = driver.FindElements(locatorAttribute.Locator);
+
+				if (matches.Count == 0)
+				{
+					throw new NoSuchElementException("No element could be found");
+				}
+
+				var element = matches.FirstOrDefault(match => match.Displayed);
+
+				if (element == null)
+				{
+					throw new ElementNotVisibleException("The element may be in the html but is not visible");
+				}
+
+				return element;
+			}
+		}
+
+		internal static IWebElement FindElement(IWebElement container, ModelLocatorAttribute locatorAttribute)
+		{
+			if (container == null || locatorAttribute == null)
+			{
+				throw new ArgumentException("No arguments can be null");
+			}
+
+			if (!locatorAttribute.FindFirstVisibleElement)
+			{
+				//let WebDriver find the first match
+				return container.FindElement(locatorAttribute.Locator);
+			}
+			else
+			{
+				//loop through all matches until we find one that is visible to the user
+				var matches = container.FindElements(locatorAttribute.Locator);
+
+				if (matches.Count == 0)
+				{
+					throw new NoSuchElementException("No element could be found");
+				}
+
+				var element = matches.FirstOrDefault(match => match.Displayed);
+
+				if (element == null)
+				{
+					throw new ElementNotVisibleException("The element may be in the html but is not visible");
+				}
+
+				return element;
+			}
+		}
+
 		public static T FindModel<T>(IWebDriver driver) where T : class
 		{
 			//get model attribute on class
@@ -27,7 +89,8 @@ namespace WebDriverModels
 
 			if (modelAttribute != null)
 			{
-				container = driver.FindElement(modelAttribute.Locator);
+				//container = driver.FindElement(modelAttribute.Locator);
+				container = FindElement(driver, modelAttribute);
 			}
 			else
 			{
@@ -51,7 +114,8 @@ namespace WebDriverModels
 
 			if (modelAttribute != null)
 			{
-				container = driver.FindElement(modelAttribute.Locator);
+				//container = driver.FindElement(modelAttribute.Locator);
+				container = FindElement(driver, modelAttribute);
 			}
 			else
 			{
@@ -75,7 +139,8 @@ namespace WebDriverModels
 
 			if (modelAttribute != null)
 			{
-				model = container.FindElement(modelAttribute.Locator);
+				//model = container.FindElement(modelAttribute.Locator);
+				model = FindElement(container, modelAttribute);
 			}
 			else
 			{
@@ -151,30 +216,80 @@ namespace WebDriverModels
 			}
 		}
 
-		//void func()
-		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Action<T>> func)
+		private static bool EvaluateMethodExpression(IWebDriver driver, MethodCallExpression expression)
 		{
-			ModelLocatorAttribute modelAttribute = null;
+			MemberExpression memberExpression = expression.Object as MemberExpression;
 
-			if (func.Body is MethodCallExpression)
-			{
-				MethodCallExpression method = func.Body as MethodCallExpression;
 
-				modelAttribute = method.Method.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
-					.FirstOrDefault()
-					as ModelLocatorAttribute;
-			}
+			ModelLocatorAttribute modelAttribute = expression.Method.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
 
 			if (modelAttribute != null)
 			{
 				try
 				{
-					return driver.FindElement(modelAttribute.Locator) != null;
+					var element = FindElement(driver, modelAttribute);
+					return element != null;
 				}
 				catch
 				{
 					return false;
 				}
+			}
+
+			return false;
+		}
+
+		private static bool EvaluatePropertyExpression(IWebDriver driver, MemberExpression expression)
+		{
+			ModelLocatorAttribute modelAttribute = expression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
+
+			if (modelAttribute != null)
+			{
+				try
+				{
+					var element = FindElement(driver, modelAttribute);
+					return element != null;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+
+			return false;
+		}
+
+		//void func()
+		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Action<T>> func)
+		{
+			MethodCallExpression method = func.Body as MethodCallExpression;
+
+			if (method != null)
+			{
+				return EvaluateMethodExpression(driver, method);
+			}
+
+			return false;
+		}
+
+		public static bool ModelPropertyExists(IWebDriver driver, Expression<Action> expression)
+		{
+			MethodCallExpression methodCallExpression = expression.Body as MethodCallExpression;
+
+			if (methodCallExpression != null)
+			{
+				return EvaluateMethodExpression(driver, methodCallExpression);
+			}
+
+			MemberExpression propertyExpression = expression.Body as MemberExpression;
+
+			if (propertyExpression != null)
+			{
+				return EvaluatePropertyExpression(driver, propertyExpression);
 			}
 
 			return false;
@@ -201,37 +316,36 @@ namespace WebDriverModels
 				return false;
 			}
 
-			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
-				.FirstOrDefault()
-				as ModelLocatorAttribute;
+			return EvaluatePropertyExpression(driver, memberExpression);
+		}
 
-			if (modelAttribute != null)
+		//model instance (property or method)
+		public static bool ModelPropertyExists<T>(IWebDriver driver, Expression<Func<T>> expression)
+		{
+			MethodCallExpression methodCallExpression = expression.Body as MethodCallExpression;
+
+			if (methodCallExpression != null)
 			{
-				try
-				{
-					return driver.FindElement(modelAttribute.Locator) != null;
-				}
-				catch
-				{
-					return false;
-				}
+				return EvaluateMethodExpression(driver, methodCallExpression);
+			}
+
+			MemberExpression propertyExpression = expression.Body as MemberExpression;
+
+			if (propertyExpression != null)
+			{
+				return EvaluatePropertyExpression(driver, propertyExpression);
 			}
 
 			return false;
 		}
 
-		public static bool ModelPropertyIsVisible<T>(IWebDriver driver, Expression<Action<T>> func)
+		private static bool EvaluateMethodIsVisible(IWebDriver driver, MethodCallExpression expression)
 		{
-			ModelLocatorAttribute modelAttribute = null;
-
-			if (func.Body is MethodCallExpression)
-			{
-				MethodCallExpression method = func.Body as MethodCallExpression;
-
-				modelAttribute = method.Method.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
-					.FirstOrDefault()
-					as ModelLocatorAttribute;
-			}
+			ModelLocatorAttribute modelAttribute = expression
+				.Method
+				.GetCustomAttributes(typeof (ModelLocatorAttribute), false)
+				.FirstOrDefault()
+				as ModelLocatorAttribute;
 
 			if (modelAttribute != null)
 			{
@@ -244,6 +358,18 @@ namespace WebDriverModels
 				{
 					return false;
 				}
+			}
+
+			return false;
+		}
+
+		public static bool ModelPropertyIsVisible<T>(IWebDriver driver, Expression<Action<T>> func)
+		{
+			MethodCallExpression method = func.Body as MethodCallExpression;
+
+			if (method != null)
+			{
+				return EvaluateMethodIsVisible(driver, method);
 			}
 
 			return false;
@@ -269,7 +395,12 @@ namespace WebDriverModels
 				return false;
 			}
 
-			ModelLocatorAttribute modelAttribute = memberExpression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
+			return EvaluatePropertyIsVisible(driver, memberExpression);
+		}
+
+		private static bool EvaluatePropertyIsVisible(IWebDriver driver, MemberExpression expression)
+		{
+			ModelLocatorAttribute modelAttribute = expression.Member.GetCustomAttributes(typeof(ModelLocatorAttribute), false)
 				.FirstOrDefault()
 				as ModelLocatorAttribute;
 
@@ -284,6 +415,26 @@ namespace WebDriverModels
 				{
 					return false;
 				}
+			}
+
+			return false;
+		}
+
+		//model instance (property or method)
+		public static bool ModelPropertyIsVisible<T>(IWebDriver driver, Expression<Func<T>> expression)
+		{
+			MethodCallExpression methodCallExpression = expression.Body as MethodCallExpression;
+
+			if (methodCallExpression != null)
+			{
+				return EvaluateMethodIsVisible(driver, methodCallExpression);
+			}
+
+			MemberExpression propertyExpression = expression.Body as MemberExpression;
+
+			if (propertyExpression != null)
+			{
+				return EvaluatePropertyIsVisible(driver, propertyExpression);
 			}
 
 			return false;

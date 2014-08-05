@@ -9,6 +9,7 @@ namespace WebDriverModels
 		public How Method { get; set; }
 		public string Identifier { get; set; }
 		public string AttributeName { get; set; }
+		public bool FindFirstVisibleElement { get; set; }
 
 		public By Locator { get
 		{
@@ -40,7 +41,7 @@ namespace WebDriverModels
 			
 		}
 
-		public ModelLocatorAttribute(string idLocator)
+		public ModelLocatorAttribute(string idLocator) : this()
 		{
 			Method = How.Id;
 			Identifier = idLocator;
